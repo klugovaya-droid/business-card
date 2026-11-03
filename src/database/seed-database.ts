@@ -35,7 +35,7 @@ export async function seedDatabase(prisma: PrismaClient): Promise<SeedResult> {
           endDate: experience.endDate ? new Date(experience.endDate) : null,
           description: experience.description,
           achievements: {
-            create: experience.achievements.map((text) => ({ text })),
+            create: experience.achievements.map((text, sortOrder) => ({ text, sortOrder })),
           },
         })),
       },

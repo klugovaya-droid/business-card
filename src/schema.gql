@@ -2,16 +2,33 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Achievement {
+  id: ID!
+  text: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Experience {
+  achievements: [Achievement!]!
+  company: String!
+  description: String
+  endDate: DateTime
+  id: ID!
+  location: String
+  position: String!
+  startDate: DateTime!
+}
 
 type Profile {
   avatarUrl: String
   createdAt: DateTime!
   description: String!
   email: String
+  experience: [Experience!]!
   githubUrl: String
   id: ID!
   linkedinUrl: String

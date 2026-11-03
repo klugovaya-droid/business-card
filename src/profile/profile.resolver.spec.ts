@@ -11,6 +11,7 @@ describe('ProfileResolver', () => {
   const loaders = {
     skills: { load: vi.fn().mockResolvedValue([]) },
     projects: { load: vi.fn().mockResolvedValue([]) },
+    experience: { load: vi.fn().mockResolvedValue([]) },
   } as unknown as ProfileLoaders;
   const resolver = new ProfileResolver({ getProfile } as unknown as ProfileService, loaders);
 
@@ -27,5 +28,10 @@ describe('ProfileResolver', () => {
   it('loads projects through the request-scoped loader', async () => {
     await expect(resolver.projects(parent)).resolves.toEqual([]);
     expect(loaders.projects.load).toHaveBeenCalledWith('profile-1');
+  });
+
+  it('loads experience through the request-scoped loader', async () => {
+    await expect(resolver.experience(parent)).resolves.toEqual([]);
+    expect(loaders.experience.load).toHaveBeenCalledWith('profile-1');
   });
 });

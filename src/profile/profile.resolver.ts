@@ -1,4 +1,5 @@
 import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Experience } from '../experience/experience.types';
 import { Project } from '../project/project.types';
 import { Skill } from '../skill/skill.types';
 import { ProfileLoaders } from './profile.loaders';
@@ -25,5 +26,10 @@ export class ProfileResolver {
   @ResolveField(() => [Project])
   projects(@Parent() profile: Profile): Promise<Project[]> {
     return this.loaders.projects.load(profile.id);
+  }
+
+  @ResolveField(() => [Experience])
+  experience(@Parent() profile: Profile): Promise<Experience[]> {
+    return this.loaders.experience.load(profile.id);
   }
 }

@@ -57,6 +57,7 @@ model Experience {
 model Achievement {
   id           String     @id @default(cuid())
   text         String
+  sortOrder    Int        @default(0)
   experienceId String
   experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 
