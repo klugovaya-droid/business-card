@@ -302,6 +302,8 @@ GitHub Actions (`.github/workflows/ci.yml`) на каждый push и pull reque
 
 ## Деплой на Railway
 
+Конфигурация Railway лежит в [`railway.json`](railway.json): Dockerfile builder, healthcheck `/health`, restart policy `ON_FAILURE`.
+
 1. Создать проект и добавить PostgreSQL.
 2. Подключить GitHub-репозиторий; Railway соберёт `Dockerfile`.
 3. Задать переменные:
@@ -311,7 +313,18 @@ GitHub Actions (`.github/workflows/ci.yml`) на каждый push и pull reque
 4. Healthcheck — `/health`.
 5. После деплоя открыть `/graphql` и выполнить запрос из тестового задания.
 
+Альтернатива через CLI:
+
+```bash
+npm i -g @railway/cli
+railway login
+railway link
+railway up
+```
+
 Entrypoint применит миграции, приложение выполнит идемпотентные сиды. Публичный URL добавляется в этот README после деплоя.
+
+> Деплой требует аккаунта/токена Railway. В текущем окружении Railway CLI и токен отсутствуют, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
 
 ## Переменные окружения
 
