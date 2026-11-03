@@ -354,6 +354,8 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 
 Если build падает с `The datasource.url property is required`, значит в окружении сборки нет ни `DIRECT_DATABASE_URL`, ни `POSTGRES_URL_NON_POOLING`, ни `DATABASE_URL`, ни `POSTGRES_URL`. Подключите Vercel Postgres к проекту (Storage → Postgres) или задайте строки подключения вручную.
 
+В build-логе Vercel есть диагностические строки `[business-card] Vercel commit:` и `[business-card] DB env:`. Первая показывает, какой commit собирается; вторая — какие DB-переменные видны (только `true`/`false`). Если SHA не совпадает с последним коммитом `main`, Vercel собирает старый код — нужно переподключить репозиторий или сделать redeploy последнего коммита.
+
 Ограничения serverless: холодные старты, лимит времени функции и соединений с БД. Для стабильного long-running backend предпочтительнее Docker на Railway/Render; Vercel — удобная альтернатива для демо и проверки API. В Vercel схема GraphQL генерируется в памяти, потому что файловая система функции доступна только для чтения.
 
 > Деплой требует аккаунта Railway или Vercel. В текущем окружении CLI/токенов нет, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
