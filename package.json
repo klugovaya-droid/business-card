@@ -4,6 +4,10 @@
   "description": "Digital business card backend: NestJS, Prisma, PostgreSQL, GraphQL, Docker",
   "private": true,
   "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klugovaya-droid/business-card.git"
+  },
   "engines": {
     "node": ">=20.19.0"
   },
