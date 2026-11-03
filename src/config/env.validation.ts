@@ -1,5 +1,11 @@
 const DEFAULT_PORT = 3000;
-const DATABASE_URL_KEYS = ['DATABASE_URL', 'POSTGRES_URL'] as const;
+const DATABASE_URL_KEYS = [
+  'DATABASE_URL',
+  'POSTGRES_URL',
+  'DIRECT_DATABASE_URL',
+  'POSTGRES_URL_NON_POOLING',
+  'DATABASE_URL_UNPOOLED',
+] as const;
 
 function resolveDatabaseUrl(config: Record<string, unknown>): string | undefined {
   for (const key of DATABASE_URL_KEYS) {
@@ -17,7 +23,7 @@ export function validateEnv(config: Record<string, unknown>): Record<string, unk
   const databaseUrl = resolveDatabaseUrl(config);
 
   if (!databaseUrl) {
-    throw new Error('DATABASE_URL or POSTGRES_URL is required');
+    throw new Error('A PostgreSQL connection URL is required');
   }
 
   const port = Number(config.PORT ?? DEFAULT_PORT);

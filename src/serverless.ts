@@ -35,10 +35,20 @@ async function getApp(): Promise<ServerlessApp> {
 
 export function createHandler(path: string) {
   return async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
-    const { server } = await getApp();
+    try {
+      const { server } = await getApp();
 
-    req.url = path;
-    server(req as Request, res as Response);
+      req.url = path;
+      server(req as Request, res as Response);
+    } catch (error) {
+      console.error('[business-card] serverless init failed', error);
+
+      if (!res.headersSent) {
+        res.statusCode = 500;
+        res.setHeader('content-type', 'application/json');
+        res.end(JSON.stringify({ error: 'SERVERLESS_INIT_FAILED' }));
+      }
+    }
   };
 }
 

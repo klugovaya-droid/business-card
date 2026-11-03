@@ -23,6 +23,16 @@ describe('validateEnv', () => {
     });
   });
 
+  it('accepts direct URL fallbacks when only they are configured', () => {
+    expect(
+      validateEnv({
+        POSTGRES_URL_NON_POOLING: 'postgresql://postgres@vercel/direct',
+      }),
+    ).toMatchObject({
+      DATABASE_URL: 'postgresql://postgres@vercel/direct',
+    });
+  });
+
   it('prefers DATABASE_URL over POSTGRES_URL', () => {
     expect(
       validateEnv({
@@ -35,7 +45,7 @@ describe('validateEnv', () => {
   });
 
   it('rejects a missing database URL', () => {
-    expect(() => validateEnv({})).toThrow('DATABASE_URL or POSTGRES_URL is required');
+    expect(() => validateEnv({})).toThrow('A PostgreSQL connection URL is required');
   });
 
   it('rejects an invalid PORT', () => {
