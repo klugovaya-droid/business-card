@@ -1,0 +1,15 @@
+node_modules
+dist
+coverage
+.git
+.github
+.env
+.env.*
+.tmp
+tests
+src/generated
+*.log
+*.tsbuildinfo
+.DS_Store
+docker-compose.yml
+scripts
