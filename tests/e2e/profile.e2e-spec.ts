@@ -42,6 +42,35 @@ describe('profile query (e2e)', () => {
     });
   });
 
+  it('returns nested skills and projects', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/graphql')
+      .send({
+        query: `
+          query NestedProfile {
+            profile {
+              skills { name category level }
+              projects { name url repositoryUrl technologies }
+            }
+          }
+        `,
+      })
+      .expect(200);
+
+    expect(response.body.errors).toBeUndefined();
+
+    const profile = response.body.data.profile;
+
+    expect(profile.skills).toHaveLength(seedData.skills.length);
+    expect(profile.projects).toHaveLength(seedData.projects.length);
+    expect(profile.skills.map((item: { name: string }) => item.name)).toEqual(
+      expect.arrayContaining(seedData.skills.map((item) => item.name)),
+    );
+    expect(profile.projects.map((item: { name: string }) => item.name)).toEqual(
+      expect.arrayContaining(seedData.projects.map((item) => item.name)),
+    );
+  });
+
   it('serves Apollo Sandbox', async () => {
     const response = await request(app.getHttpServer())
       .get('/graphql')

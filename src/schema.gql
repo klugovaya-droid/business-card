@@ -17,10 +17,28 @@ type Profile {
   linkedinUrl: String
   location: String
   name: String!
+  projects: [Project!]!
+  skills: [Skill!]!
   title: String
+}
+
+type Project {
+  description: String
+  id: ID!
+  name: String!
+  repositoryUrl: String
+  technologies: [String!]!
+  url: String
 }
 
 type Query {
   """Returns the business card profile"""
   profile: Profile
+}
+
+type Skill {
+  category: String
+  id: ID!
+  level: Int
+  name: String!
 }
