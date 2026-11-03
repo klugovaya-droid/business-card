@@ -285,6 +285,13 @@ E2E-контур:
 
 Браузерная автоматизация (Playwright) не используется: продукт — backend API, проверять UI нечего. E2E-драйвер — HTTP и реальная БД; это осознанное решение, а не пропуск тестов.
 
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) на каждый push и pull request в `main`:
+
+- устанавливает зависимости, генерирует Prisma Client и запускает `npm run validate` (typecheck + unit + e2e на Testcontainers);
+- отдельным job собирает Docker-образ.
+
 ## Docker
 
 - Multi-stage `Dockerfile`: зависимости → сборка (`prisma generate` + `nest build`) → runtime.
