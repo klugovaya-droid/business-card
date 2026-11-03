@@ -13,7 +13,7 @@ Backend-приложение «цифровая визитка» на NestJS, Pr
 
 | Компонент | Версия | Зачем |
 | --- | --- | --- |
-| Node.js | 22 LTS | runtime в Docker; локально >= 20.19 |
+| Node.js | 22 LTS | runtime в Docker и Vercel; локально >= 22.12 |
 | TypeScript | 6.0 | strict-режим |
 | NestJS | 12.3 | модульная архитектура, DI |
 | GraphQL | 16.14 | code-first, Apollo Sandbox |
@@ -348,7 +348,7 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
    - `CORS_ORIGIN=*`;
    - `NODE_ENV=production`.
 4. Запустить deploy. Build применит миграции и сиды.
-5. Sandbox: `https://<project>.vercel.app/graphql`, health: `/health`.
+5. Корень `https://<project>.vercel.app/` отдаёт `public/index.html` со ссылками; Sandbox — `/graphql`, health — `/health`.
 
 В Vercel вместо отдельного «Postgres» доступны **Neon**, **Supabase** и **Prisma Postgres**.
 
@@ -377,7 +377,8 @@ Runtime-ошибки Vercel также пишутся в function logs:
 Важно для Vercel:
 
 - **Framework Preset: Other / no framework.** Если Vercel выбирает NestJS-пресет, он запускает `src/main.ts` и падает с `ERR_REQUIRE_ESM`. В `vercel.json` зафиксировано `"framework": null`; в dashboard также проверьте Project Settings → General → Framework Preset.
-- **Node.js Version: 22.x** (Project Settings → General). NestJS 12 поставляется как ESM; Node 22 поддерживает `require(esm)` для CommonJS-функций.
+- **Node.js Version: 22.x или новее** (Project Settings → General). NestJS 12 поставляется как ESM; Node >=22.12 поддерживает `require(esm)` для CommonJS-функций. В `package.json` зафиксировано `engines.node >=22.12.0`.
+- **Output Directory: `public`** — в репозитории есть `public/index.html`; `vercel.json` задаёт `"outputDirectory": "public"`. Без этого Vercel ругается `No Output Directory named "public"`.
 - После изменения настроек обязателен **Redeploy**.
 
 > Деплой требует аккаунта Railway или Vercel. В текущем окружении CLI/токенов нет, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
@@ -408,6 +409,8 @@ Runtime-ошибки Vercel также пишутся в function logs:
 ├── api/                   # Vercel serverless-функции
 │   ├── graphql.js
 │   └── health.js
+├── public/                # статический landing для Vercel
+│   └── index.html
 ├── src/
 │   ├── main.ts
 │   ├── serverless.ts      # lazy-адаптер для Vercel
