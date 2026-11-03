@@ -1,4 +1,5 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+import { sanitizeError } from '../common/errors/sanitize-error';
 import { PrismaService } from '../prisma/prisma.service';
 
 export interface HealthStatus {
@@ -17,12 +18,18 @@ export class HealthService {
 
     try {
       await this.prisma.$queryRaw`SELECT 1`;
-    } catch {
+    } catch (error) {
+      const details =
+        process.env.VERCEL === '1' || process.env.DEBUG_ERRORS === 'true'
+          ? { message: sanitizeError(error) }
+          : {};
+
       throw new ServiceUnavailableException({
         status: 'error',
         service: 'business-card',
         timestamp,
         db: 'down',
+        ...details,
       });
     }
 

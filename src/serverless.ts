@@ -5,6 +5,7 @@ import { ExpressAdapter } from '@nestjs/platform-express';
 import express, { Express, Request, Response } from 'express';
 import { AppModule } from './app.module';
 import { configureApp } from './app.setup';
+import { sanitizeError } from './common/errors/sanitize-error';
 
 interface ServerlessApp {
   app: INestApplication;
@@ -46,7 +47,12 @@ export function createHandler(path: string) {
       if (!res.headersSent) {
         res.statusCode = 500;
         res.setHeader('content-type', 'application/json');
-        res.end(JSON.stringify({ error: 'SERVERLESS_INIT_FAILED' }));
+        res.end(
+          JSON.stringify({
+            error: 'SERVERLESS_INIT_FAILED',
+            message: sanitizeError(error),
+          }),
+        );
       }
     }
   };

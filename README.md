@@ -367,9 +367,10 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 
 Runtime-ошибки Vercel также пишутся в function logs:
 
-- `BUNDLE_LOAD_FAILED` — функция не нашла `dist/serverless.js`; проверить `includeFiles`/сборку.
-- `SERVERLESS_INIT_FAILED` — ошибка инициализации Nest/Prisma; в логах будет стек и строка `[business-card] runtime DB:` с протоколом и хостом (без пароля).
-- `/health` возвращает `503` с `db: "down"`, если приложение поднялось, но БД недоступна.
+- `BUNDLE_LOAD_FAILED` — функция не нашла `dist/serverless.js`; в ответе будет `message` с причиной.
+- `SERVERLESS_INIT_FAILED` — ошибка инициализации Nest/Prisma; в ответе будет sanitized-`message`, а в логах — стек и строка `[business-card] runtime DB:`.
+- `/health` возвращает `503` с `db: "down"` и sanitized-`message`, если приложение поднялось, но БД недоступна.
+- GraphQL внутренние ошибки содержат sanitized-`details` на Vercel; отключить можно `DEBUG_ERRORS=false`.
 
 Ограничения serverless: холодные старты, лимит времени функции и соединений с БД. Для стабильного long-running backend предпочтительнее Docker на Railway/Render; Vercel — удобная альтернатива для демо и проверки API. В Vercel схема GraphQL генерируется в памяти, потому что файловая система функции доступна только для чтения.
 
@@ -388,6 +389,7 @@ Runtime-ошибки Vercel также пишутся в function logs:
 | `NODE_ENV` | нет | `development` | режим приложения |
 | `CORS_ORIGIN` | нет | `*` | разрешённые origin через запятую |
 | `PRISMA_LOG_QUERIES` | нет | `false` | событийное логирование SQL для e2e-счётчика |
+| `DEBUG_ERRORS` | нет | `true` на Vercel | показывать sanitized-детали внутренних ошибок; `false` отключает |
 
 ## Структура проекта
 
