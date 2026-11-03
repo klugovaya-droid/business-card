@@ -1,5 +1,7 @@
 # Digital Business Card — backend
 
+[![CI](https://github.com/klugovaya-droid/business-card/actions/workflows/ci.yml/badge.svg)](https://github.com/klugovaya-droid/business-card/actions/workflows/ci.yml)
+
 Backend-приложение «цифровая визитка» на NestJS, Prisma, PostgreSQL и GraphQL. Отдаёт профиль, навыки, опыт работы с достижениями и проекты; в браузере доступен Apollo Sandbox. Запускается с нуля одной командой, сам применяет миграции и заполняет базу.
 
 ## Ссылки
