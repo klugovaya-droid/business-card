@@ -10,11 +10,14 @@ const landingPagePlugin = ApolloServerPluginLandingPageLocalDefault() as unknown
   ApolloDriverConfig['plugins']
 >[number];
 
+// Vercel functions have a read-only filesystem, so keep the schema in memory there.
+const autoSchemaFile = process.env.VERCEL ? true : join(process.cwd(), 'src/schema.gql');
+
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile,
       sortSchema: true,
       playground: false,
       introspection: true,

@@ -7,7 +7,7 @@ Backend-приложение «цифровая визитка» на NestJS, Pr
 ## Ссылки
 
 - Исходный код: <https://github.com/klugovaya-droid/business-card>
-- Живое приложение: будет добавлено после Railway-деплоя (см. раздел «Деплой на Railway»).
+- Живое приложение: будет добавлено после деплоя (Railway или Vercel; см. раздел «Деплой»).
 
 ## Стек
 
@@ -284,8 +284,8 @@ npm run build
 E2E-контур:
 
 - `tests/e2e/global-setup.ts` поднимает PostgreSQL через Testcontainers и применяет `prisma migrate deploy`.
-- `tests/e2e/setup.ts` прокидывает `DATABASE_URL` и включает событийное логирование запросов.
-- Приложение создаётся реальным Nest-модулем, запросы идут по HTTP через supertest.
+- `tests/e2e/setup.ts` прокидывает `DATABASE_URL`, включает событийное логирование запросов и режим Vercel-схемы.
+- Приложение создаётся реальным Nest-модулем, запросы идут по HTTP через supertest; отдельный тест проверяет serverless-обработчик `api/graphql.js`/`api/health.js`.
 - Проверяются health, схема БД, сиды, вложенные GraphQL-поля, introspection, Sandbox, безопасные ошибки, CORS и отсутствие N+1.
 
 Браузерная автоматизация (Playwright) не используется: продукт — backend API, проверять UI нечего. E2E-драйвер — HTTP и реальная БД; это осознанное решение, а не пропуск тестов.
@@ -327,15 +327,39 @@ railway link
 railway up
 ```
 
-Entrypoint применит миграции, приложение выполнит идемпотентные сиды. Публичный URL добавляется в этот README после деплоя.
+Entrypoint применит миграции, приложение выполнит идемпотентные сиды.
 
-> Деплой требует аккаунта/токена Railway. В текущем окружении Railway CLI и токен отсутствуют, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
+### Vercel (serverless)
+
+Vercel — serverless-платформа, поэтому Docker-entrypoint с миграциями там не выполняется. Для Vercel добавлены:
+
+- `src/serverless.ts` — ленивая инициализация Nest-приложения и обработчик;
+- `api/graphql.js`, `api/health.js` — функции Vercel;
+- `vercel.json` — rewrites `/graphql` и `/health`, build command;
+- `npm run vercel-build` — `prisma generate && nest build && prisma migrate deploy && prisma db seed`.
+
+Порядок деплоя:
+
+1. Импортировать GitHub-репозиторий в Vercel.
+2. Добавить Vercel Postgres (Neon) или внешний PostgreSQL.
+3. Задать переменные окружения:
+   - `DATABASE_URL` — pooled URL для runtime;
+   - `DIRECT_DATABASE_URL` — direct URL для миграций и сида;
+   - `CORS_ORIGIN=*`;
+   - `NODE_ENV=production`.
+4. Запустить deploy. Build применит миграции и сиды.
+5. Sandbox: `https://<project>.vercel.app/graphql`, health: `/health`.
+
+Ограничения serverless: холодные старты, лимит времени функции и соединений с БД. Для стабильного long-running backend предпочтительнее Docker на Railway/Render; Vercel — удобная альтернатива для демо и проверки API. В Vercel схема GraphQL генерируется в памяти, потому что файловая система функции доступна только для чтения.
+
+> Деплой требует аккаунта Railway или Vercel. В текущем окружении CLI/токенов нет, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
 
 ## Переменные окружения
 
 | Переменная | Обязательна | По умолчанию | Назначение |
 | --- | --- | --- | --- |
-| `DATABASE_URL` | да | — | строка подключения PostgreSQL |
+| `DATABASE_URL` | да | — | строка подключения PostgreSQL (в Vercel — pooled) |
+| `DIRECT_DATABASE_URL` | нет | `DATABASE_URL` | прямое подключение для миграций/сида (Vercel/Neon) |
 | `PORT` | нет | `3000` | порт HTTP-сервера |
 | `NODE_ENV` | нет | `development` | режим приложения |
 | `CORS_ORIGIN` | нет | `*` | разрешённые origin через запятую |
@@ -349,8 +373,12 @@ Entrypoint применит миграции, приложение выполн�
 │   ├── schema.prisma
 │   ├── migrations/
 │   └── seed.ts
+├── api/                   # Vercel serverless-функции
+│   ├── graphql.js
+│   └── health.js
 ├── src/
 │   ├── main.ts
+│   ├── serverless.ts      # lazy-адаптер для Vercel
 │   ├── app.module.ts
 │   ├── app.setup.ts
 │   ├── config/            # валидация env
@@ -371,6 +399,7 @@ Entrypoint применит миграции, приложение выполн�
 ├── docker/entrypoint.sh
 ├── scripts/smoke-docker.sh
 ├── prisma7.config.ts
+├── vercel.json
 └── src/schema.gql
 ```
 
@@ -382,6 +411,7 @@ Entrypoint применит миграции, приложение выполн�
 - **Prisma 7 + CJS.** Современный Prisma с Rust-free клиентом и adapter-pg; CJS выбран для совместимости с текущим NestJS-тулчейном. GraphQL 16, а не 17, потому что Apollo Server 5 требует `^16.11`.
 - **Миграции в entrypoint, сиды в bootstrap.** Миграции — инфраструктурная операция перед стартом; сиды — обычный код приложения, который можно тестировать и запускать отдельно. Обе операции идемпотентны.
 - **`prisma` CLI в production dependencies.** Компромисс в пользу простого одношагового запуска: миграции применяются тем же контейнером, без отдельного job.
+- **Vercel-адаптер.** Nest-приложение инициализируется лениво и отдаётся через Express-инстанс; схема GraphQL в Vercel генерируется в памяти, миграции/сиды выполняются в `vercel-build`. Это добавляет serverless-хостинг, не меняя основной Docker-путь.
 - **Introspection включён.** Это требование демо/тестового задания. В реальном проде его стоит отключить и ограничить доступ к Sandbox.
 - **Нет auth, mutations и S3.** Вне scope тестового задания: нужен публичный read-only API. Поле `avatarUrl` — строка, без загрузки файлов.
 - **Временные данные.** `src/database/seed-data.ts` содержит плейсхолдеры; перед сдачей заменить на реальные данные и проверить ссылки.

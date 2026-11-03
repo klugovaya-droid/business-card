@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run vercel-build",
+  "functions": {
+    "api/graphql.js": {
+      "memory": 1024,
+      "maxDuration": 10,
+      "includeFiles": "dist/**"
+    },
+    "api/health.js": {
+      "memory": 512,
+      "maxDuration": 10,
+      "includeFiles": "dist/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/graphql", "destination": "/api/graphql" },
+    { "source": "/health", "destination": "/api/health" },
+    { "source": "/", "destination": "/api/health" }
+  ]
+}

@@ -25,7 +25,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
-    "smoke:docker": "bash scripts/smoke-docker.sh"
+    "smoke:docker": "bash scripts/smoke-docker.sh",
+    "vercel-build": "prisma generate && nest build && prisma migrate deploy && prisma db seed"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",

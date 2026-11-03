@@ -3,6 +3,9 @@ dist
 coverage
 .git
 .github
+.vercel
+api
+vercel.json
 .env
 .env.*
 .tmp
