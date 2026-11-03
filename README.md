@@ -350,9 +350,18 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 4. Запустить deploy. Build применит миграции и сиды.
 5. Sandbox: `https://<project>.vercel.app/graphql`, health: `/health`.
 
-Если база создана через **Vercel Postgres**, интеграция сама добавляет `POSTGRES_URL` и `POSTGRES_URL_NON_POOLING`. Приложение и Prisma CLI используют их как fallback: `POSTGRES_URL_NON_POOLING` — для миграций/сида, `POSTGRES_URL` — для runtime. Дублировать их в `DATABASE_URL`/`DIRECT_DATABASE_URL` не обязательно.
+В Vercel вместо отдельного «Postgres» доступны **Neon**, **Supabase** и **Prisma Postgres**.
 
-Если build падает с `The datasource.url property is required`, значит в окружении сборки нет ни `DIRECT_DATABASE_URL`, ни `POSTGRES_URL_NON_POOLING`, ни `DATABASE_URL`, ни `POSTGRES_URL`. Подключите Vercel Postgres к проекту (Storage → Postgres) или задайте строки подключения вручную.
+- **Neon (рекомендую):** стандартный PostgreSQL, есть pooled и direct URL, хорошо работает с `@prisma/adapter-pg`.
+- **Supabase:** тоже подходит; для миграций нужен direct URL (не transaction pooler).
+- **Prisma Postgres:** подходит только если интеграция выдаёт обычный `postgres://` URL; `prisma+postgres://` текущий `@prisma/adapter-pg` не принимает.
+
+Интеграции добавляют разные имена переменных. Поддерживаются:
+
+- runtime: `DATABASE_URL` или `POSTGRES_URL` (обычно pooled);
+- миграции/сид: `DIRECT_DATABASE_URL`, `POSTGRES_URL_NON_POOLING` или `DATABASE_URL_UNPOOLED`.
+
+Если build падает с `The datasource.url property is required`, значит в окружении сборки нет ни одного из этих URL. Подключите базу к проекту (Storage → Neon/Supabase) или задайте строки подключения вручную.
 
 В build-логе Vercel есть диагностические строки `[business-card] Vercel commit:` и `[business-card] DB env:`. Первая показывает, какой commit собирается; вторая — какие DB-переменные видны (только `true`/`false`). Если SHA не совпадает с последним коммитом `main`, Vercel собирает старый код — нужно переподключить репозиторий или сделать redeploy последнего коммита.
 
@@ -365,9 +374,10 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 | Переменная | Обязательна | По умолчанию | Назначение |
 | --- | --- | --- | --- |
 | `DATABASE_URL` | да* | — | строка подключения PostgreSQL (в Vercel — pooled); *или `POSTGRES_URL` |
-| `DIRECT_DATABASE_URL` | нет | `POSTGRES_URL_NON_POOLING` → `DATABASE_URL` | прямое подключение для миграций/сида (Vercel/Neon) |
-| `POSTGRES_URL` | да* | — | pooled URL, автоматически добавляется Vercel Postgres |
-| `POSTGRES_URL_NON_POOLING` | нет | — | direct URL для миграций, автоматически добавляется Vercel Postgres |
+| `DIRECT_DATABASE_URL` | нет | `POSTGRES_URL_NON_POOLING` → `DATABASE_URL_UNPOOLED` → `DATABASE_URL` | прямое подключение для миграций/сида (Vercel/Neon) |
+| `POSTGRES_URL` | да* | — | pooled URL, автоматически добавляется интеграциями Vercel |
+| `POSTGRES_URL_NON_POOLING` | нет | — | direct URL для миграций, автоматически добавляется интеграциями Vercel |
+| `DATABASE_URL_UNPOOLED` | нет | — | direct URL, который добавляет Neon-интеграция |
 | `PORT` | нет | `3000` | порт HTTP-сервера |
 | `NODE_ENV` | нет | `development` | режим приложения |
 | `CORS_ORIGIN` | нет | `*` | разрешённые origin через запятую |

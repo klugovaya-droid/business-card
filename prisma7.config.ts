@@ -4,6 +4,7 @@ import { defineConfig } from 'prisma/config';
 const databaseUrl =
   process.env.DIRECT_DATABASE_URL ??
   process.env.POSTGRES_URL_NON_POOLING ??
+  process.env.DATABASE_URL_UNPOOLED ??
   process.env.DATABASE_URL ??
   process.env.POSTGRES_URL;
 
@@ -12,6 +13,7 @@ if (process.env.VERCEL) {
   console.log('[business-card] DB env:', {
     DIRECT_DATABASE_URL: Boolean(process.env.DIRECT_DATABASE_URL),
     POSTGRES_URL_NON_POOLING: Boolean(process.env.POSTGRES_URL_NON_POOLING),
+    DATABASE_URL_UNPOOLED: Boolean(process.env.DATABASE_URL_UNPOOLED),
     DATABASE_URL: Boolean(process.env.DATABASE_URL),
     POSTGRES_URL: Boolean(process.env.POSTGRES_URL),
   });
