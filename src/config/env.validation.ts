@@ -1,10 +1,23 @@
 const DEFAULT_PORT = 3000;
+const DATABASE_URL_KEYS = ['DATABASE_URL', 'POSTGRES_URL'] as const;
+
+function resolveDatabaseUrl(config: Record<string, unknown>): string | undefined {
+  for (const key of DATABASE_URL_KEYS) {
+    const value = config[key];
+
+    if (typeof value === 'string' && value.trim() !== '') {
+      return value;
+    }
+  }
+
+  return undefined;
+}
 
 export function validateEnv(config: Record<string, unknown>): Record<string, unknown> {
-  const databaseUrl = config.DATABASE_URL;
+  const databaseUrl = resolveDatabaseUrl(config);
 
-  if (typeof databaseUrl !== 'string' || databaseUrl.trim() === '') {
-    throw new Error('DATABASE_URL is required');
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL or POSTGRES_URL is required');
   }
 
   const port = Number(config.PORT ?? DEFAULT_PORT);
@@ -13,5 +26,5 @@ export function validateEnv(config: Record<string, unknown>): Record<string, unk
     throw new Error('PORT must be an integer between 1 and 65535');
   }
 
-  return { ...config, PORT: port };
+  return { ...config, DATABASE_URL: databaseUrl, PORT: port };
 }

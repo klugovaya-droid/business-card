@@ -17,8 +17,25 @@ describe('validateEnv', () => {
     });
   });
 
-  it('rejects a missing DATABASE_URL', () => {
-    expect(() => validateEnv({})).toThrow('DATABASE_URL is required');
+  it('accepts POSTGRES_URL as a Vercel Postgres fallback', () => {
+    expect(validateEnv({ POSTGRES_URL: 'postgresql://postgres@vercel/db' })).toMatchObject({
+      DATABASE_URL: 'postgresql://postgres@vercel/db',
+    });
+  });
+
+  it('prefers DATABASE_URL over POSTGRES_URL', () => {
+    expect(
+      validateEnv({
+        DATABASE_URL: 'postgresql://primary/db',
+        POSTGRES_URL: 'postgresql://fallback/db',
+      }),
+    ).toMatchObject({
+      DATABASE_URL: 'postgresql://primary/db',
+    });
+  });
+
+  it('rejects a missing database URL', () => {
+    expect(() => validateEnv({})).toThrow('DATABASE_URL or POSTGRES_URL is required');
   });
 
   it('rejects an invalid PORT', () => {

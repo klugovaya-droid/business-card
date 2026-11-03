@@ -350,6 +350,10 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 4. Запустить deploy. Build применит миграции и сиды.
 5. Sandbox: `https://<project>.vercel.app/graphql`, health: `/health`.
 
+Если база создана через **Vercel Postgres**, интеграция сама добавляет `POSTGRES_URL` и `POSTGRES_URL_NON_POOLING`. Приложение и Prisma CLI используют их как fallback: `POSTGRES_URL_NON_POOLING` — для миграций/сида, `POSTGRES_URL` — для runtime. Дублировать их в `DATABASE_URL`/`DIRECT_DATABASE_URL` не обязательно.
+
+Если build падает с `The datasource.url property is required`, значит в окружении сборки нет ни `DIRECT_DATABASE_URL`, ни `POSTGRES_URL_NON_POOLING`, ни `DATABASE_URL`, ни `POSTGRES_URL`. Подключите Vercel Postgres к проекту (Storage → Postgres) или задайте строки подключения вручную.
+
 Ограничения serverless: холодные старты, лимит времени функции и соединений с БД. Для стабильного long-running backend предпочтительнее Docker на Railway/Render; Vercel — удобная альтернатива для демо и проверки API. В Vercel схема GraphQL генерируется в памяти, потому что файловая система функции доступна только для чтения.
 
 > Деплой требует аккаунта Railway или Vercel. В текущем окружении CLI/токенов нет, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
@@ -358,8 +362,10 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 
 | Переменная | Обязательна | По умолчанию | Назначение |
 | --- | --- | --- | --- |
-| `DATABASE_URL` | да | — | строка подключения PostgreSQL (в Vercel — pooled) |
-| `DIRECT_DATABASE_URL` | нет | `DATABASE_URL` | прямое подключение для миграций/сида (Vercel/Neon) |
+| `DATABASE_URL` | да* | — | строка подключения PostgreSQL (в Vercel — pooled); *или `POSTGRES_URL` |
+| `DIRECT_DATABASE_URL` | нет | `POSTGRES_URL_NON_POOLING` → `DATABASE_URL` | прямое подключение для миграций/сида (Vercel/Neon) |
+| `POSTGRES_URL` | да* | — | pooled URL, автоматически добавляется Vercel Postgres |
+| `POSTGRES_URL_NON_POOLING` | нет | — | direct URL для миграций, автоматически добавляется Vercel Postgres |
 | `PORT` | нет | `3000` | порт HTTP-сервера |
 | `NODE_ENV` | нет | `development` | режим приложения |
 | `CORS_ORIGIN` | нет | `*` | разрешённые origin через запятую |
