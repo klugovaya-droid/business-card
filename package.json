@@ -23,12 +23,17 @@
     "seed": "prisma db seed"
   },
   "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "@as-integrations/express5": "^1.1.2",
+    "@nestjs/apollo": "^14.1.2",
     "@nestjs/common": "^12.3.2",
     "@nestjs/config": "^12.0.1",
     "@nestjs/core": "^12.3.2",
+    "@nestjs/graphql": "^14.1.2",
     "@nestjs/platform-express": "^12.3.2",
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "graphql": "^16.14.2",
     "pg": "^8.23.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"
@@ -61,6 +66,7 @@
     "protobufjs@7.6.6": true,
     "ssh2@1.17.0": true,
     "fsevents@2.3.3": true,
-    "esbuild@0.28.2": true
+    "esbuild@0.28.2": true,
+    "@apollo/protobufjs@1.2.8": true
   }
 }
