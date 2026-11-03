@@ -374,6 +374,12 @@ Runtime-ошибки Vercel также пишутся в function logs:
 
 Ограничения serverless: холодные старты, лимит времени функции и соединений с БД. Для стабильного long-running backend предпочтительнее Docker на Railway/Render; Vercel — удобная альтернатива для демо и проверки API. В Vercel схема GraphQL генерируется в памяти, потому что файловая система функции доступна только для чтения.
 
+Важно для Vercel:
+
+- **Framework Preset: Other / no framework.** Если Vercel выбирает NestJS-пресет, он запускает `src/main.ts` и падает с `ERR_REQUIRE_ESM`. В `vercel.json` зафиксировано `"framework": null`; в dashboard также проверьте Project Settings → General → Framework Preset.
+- **Node.js Version: 22.x** (Project Settings → General). NestJS 12 поставляется как ESM; Node 22 поддерживает `require(esm)` для CommonJS-функций.
+- После изменения настроек обязателен **Redeploy**.
+
 > Деплой требует аккаунта Railway или Vercel. В текущем окружении CLI/токенов нет, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
 
 ## Переменные окружения
