@@ -3,6 +3,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'node:path';
+import { formatGraphqlError } from '../common/graphql/format-error';
 
 // The landing-page package ships ESM types while the Nest driver uses CJS types.
 const landingPagePlugin = ApolloServerPluginLandingPageLocalDefault() as unknown as NonNullable<
@@ -18,6 +19,7 @@ const landingPagePlugin = ApolloServerPluginLandingPageLocalDefault() as unknown
       playground: false,
       introspection: true,
       includeStacktraceInErrorResponses: false,
+      formatError: formatGraphqlError,
       plugins: [landingPagePlugin],
     }),
   ],
