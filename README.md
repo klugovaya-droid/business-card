@@ -7,7 +7,8 @@ Backend-приложение «цифровая визитка» на NestJS, Pr
 ## Ссылки
 
 - Исходный код: <https://github.com/klugovaya-droid/business-card>
-- Живое приложение: будет добавлено после деплоя (Railway или Vercel; см. раздел «Деплой»).
+- Живое приложение: <https://business-card-test-three.vercel.app>
+- Apollo Sandbox: <https://business-card-test-three.vercel.app/graphql>
 
 ## Стек
 
@@ -381,7 +382,7 @@ Runtime-ошибки Vercel также пишутся в function logs:
 - **Output Directory: `public`** — в репозитории есть `public/index.html`; `vercel.json` задаёт `"outputDirectory": "public"`. Без этого Vercel ругается `No Output Directory named "public"`.
 - После изменения настроек обязателен **Redeploy**.
 
-> Деплой требует аккаунта Railway или Vercel. В текущем окружении CLI/токенов нет, поэтому живая ссылка ещё не создана; проект полностью готов к деплою.
+Production: <https://business-card-test-three.vercel.app>. Деплой выполнен через Vercel CLI; проект Vercel использует приватный репозиторий `business-card-test`, публичный исходный код — `business-card`.
 
 ## Переменные окружения
 
@@ -466,5 +467,5 @@ Runtime-ошибки Vercel также пишутся в function logs:
 - [x] Docker: запуск с нуля.
 - [x] README с обоснованием решений.
 - [x] Ссылка на Git-репозиторий: <https://github.com/klugovaya-droid/business-card>.
-- [ ] Публичная ссылка на приложение (Railway).
+- [x] Публичная ссылка: <https://business-card-test-three.vercel.app>.
 - [ ] Реальные данные кандидата вместо плейсхолдеров.
