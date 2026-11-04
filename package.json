@@ -26,7 +26,7 @@
     "prisma:deploy": "prisma migrate deploy",
     "seed": "prisma db seed",
     "smoke:docker": "bash scripts/smoke-docker.sh",
-    "vercel-build": "prisma generate && nest build && prisma migrate deploy && prisma db seed"
+    "vercel-build": "prisma generate && nest build && node scripts/build-serverless.mjs && prisma migrate deploy && prisma db seed"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",
@@ -57,6 +57,7 @@
     "@types/node": "^22.20.5",
     "@types/pg": "^8.23.1",
     "@types/supertest": "^7.2.1",
+    "esbuild": "^0.28.2",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.10",

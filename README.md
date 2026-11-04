@@ -337,7 +337,7 @@ Vercel — serverless-платформа, поэтому Docker-entrypoint с м
 - `src/serverless.ts` — ленивая инициализация Nest-приложения и обработчик;
 - `api/graphql.js`, `api/health.js` — функции Vercel;
 - `vercel.json` — rewrites `/graphql` и `/health`, build command;
-- `npm run vercel-build` — `prisma generate && nest build && prisma migrate deploy && prisma db seed`.
+- `npm run vercel-build` — generate → build → CJS-бандл (`scripts/build-serverless.mjs`) → migrate → seed. Бандл нужен, потому что Vercel runtime не поддерживает `require()` ESM-зависимости NestJS 12.
 
 Порядок деплоя:
 

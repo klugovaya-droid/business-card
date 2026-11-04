@@ -1,7 +1,7 @@
 let handler;
 
 try {
-  const { createHandler } = require('../dist/serverless');
+  const { createHandler } = require('../dist/serverless.cjs');
 
   handler = createHandler('/health');
 } catch (error) {
