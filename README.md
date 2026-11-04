@@ -384,6 +384,8 @@ Runtime-ошибки Vercel также пишутся в function logs:
 
 Production: <https://business-card-test-three.vercel.app>. Деплой выполнен через Vercel CLI; проект Vercel использует приватный репозиторий `business-card-test`, публичный исходный код — `business-card`.
 
+Live smoke: `/health` → `200` (`db: up`); GraphQL-запрос возвращает профиль, навыки, опыт с достижениями и проекты.
+
 ## Переменные окружения
 
 | Переменная | Обязательна | По умолчанию | Назначение |
