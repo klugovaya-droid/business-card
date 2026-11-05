@@ -452,7 +452,7 @@ Live smoke: `/health` → `200` (`db: up`); GraphQL-запрос возвращ�
 - **Vercel-адаптер.** Nest-приложение инициализируется лениво и отдаётся через Express-инстанс; схема GraphQL в Vercel генерируется в памяти, миграции/сиды выполняются в `vercel-build`. Это добавляет serverless-хостинг, не меняя основной Docker-путь.
 - **Introspection включён.** Это требование демо/тестового задания. В реальном проде его стоит отключить и ограничить доступ к Sandbox.
 - **Нет auth, mutations и S3.** Вне scope тестового задания: нужен публичный read-only API. Поле `avatarUrl` — строка, без загрузки файлов.
-- **Данные профиля.** `src/database/seed-data.ts` содержит данные из резюме: последние два места работы (Банк ДОМ.РФ, СберКорус), backend-фокус, навыки и проекты (Business Card API, Price Ninja, Korus-UI). Seed идемпотентно создаёт или обновляет профиль и связи.
+- **Данные профиля.** `src/database/seed-data.ts` содержит данные из резюме: последние два места работы (Банк ДОМ.РФ, СберКорус), backend-фокус, навыки и проекты (Business Card API, Price Ninja). Seed идемпотентно создаёт или обновляет профиль и связи.
 
 ## Чек-лист требований
 
@@ -470,4 +470,4 @@ Live smoke: `/health` → `200` (`db: up`); GraphQL-запрос возвращ�
 - [x] README с обоснованием решений.
 - [x] Ссылка на Git-репозиторий: <https://github.com/klugovaya-droid/business-card>.
 - [x] Публичная ссылка: <https://business-card-test-xenialugovayas-projects.vercel.app>.
-- [x] Данные профиля из резюме: Банк ДОМ.РФ, СберКорус, Price Ninja, Korus-UI.
+- [x] Данные профиля из резюме: Банк ДОМ.РФ, СберКорус, Price Ninja.

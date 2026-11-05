@@ -37,7 +37,7 @@ export interface SeedProfile {
 }
 
 export const seedData: SeedProfile = {
-  slug: 'ksenia-lugovaa',
+  slug: 'ksenia-lugovaya',
   name: 'Ксения Луговая',
   title: 'Fullstack-разработчик с фокусом на backend',
   description:
@@ -47,7 +47,7 @@ export const seedData: SeedProfile = {
     'Веду фичи от требований до продакшена; до разработки была проектным менеджером. Английский C1.',
   email: 'k27873598@gmail.com',
   location: 'Санкт-Петербург · удалённо',
-  githubUrl: 'https://github.com/xenialugovaya',
+  githubUrl: 'https://github.com/klugovaya-droid',
   linkedinUrl: null,
   skills: [
     { name: 'TypeScript', category: 'Languages', level: 5 },
@@ -108,14 +108,7 @@ export const seedData: SeedProfile = {
       description: 'Веб-сервис для сравнения цен.',
       url: 'https://priceninja.ru/',
       repositoryUrl: null,
-      technologies: [],
-    },
-    {
-      name: 'Korus-UI',
-      description: 'Открытая библиотека React-компонентов для электронного документооборота.',
-      url: null,
-      repositoryUrl: 'https://github.com/kksng/korus-ui',
-      technologies: ['React', 'TypeScript', 'Storybook', 'Jest', 'Cypress'],
+      technologies: ['TypeScript', 'NextJS'],
     },
   ],
 };

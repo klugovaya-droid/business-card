@@ -28,8 +28,8 @@ function experienceData() {
 }
 
 export async function seedDatabase(prisma: PrismaClient): Promise<SeedResult> {
-  const existingProfile = await prisma.profile.findUnique({
-    where: { slug: seedData.slug },
+  const existingProfile = await prisma.profile.findFirst({
+    orderBy: { createdAt: 'asc' },
     select: { id: true },
   });
 
@@ -37,6 +37,7 @@ export async function seedDatabase(prisma: PrismaClient): Promise<SeedResult> {
     await prisma.profile.update({
       where: { id: existingProfile.id },
       data: {
+        slug: seedData.slug,
         ...profileData,
         skills: { deleteMany: {}, create: seedData.skills },
         experience: { deleteMany: {}, create: experienceData() },
