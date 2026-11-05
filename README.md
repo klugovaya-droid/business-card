@@ -382,7 +382,7 @@ Runtime-ошибки Vercel также пишутся в function logs:
 - **Output Directory: `public`** — в репозитории есть `public/index.html`; `vercel.json` задаёт `"outputDirectory": "public"`. Без этого Vercel ругается `No Output Directory named "public"`.
 - После изменения настроек обязателен **Redeploy**.
 
-Production: <https://business-card-test-xenialugovayas-projects.vercel.app>. Деплой выполнен через Vercel CLI; проект Vercel использует приватный репозиторий `business-card-test`, публичный исходный код — `business-card`.
+Production: <https://business-card-test-xenialugovayas-projects.vercel.app>. Исходный код и Vercel-проект используют публичный репозиторий `business-card`.
 
 Live smoke: `/health` → `200` (`db: up`); GraphQL-запрос возвращает профиль, навыки, опыт с достижениями и проекты.
 
