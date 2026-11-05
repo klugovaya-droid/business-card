@@ -25,7 +25,7 @@ async function main(): Promise<void> {
 
   try {
     const result = await seedDatabase(prisma);
-    console.log(result === 'seeded' ? 'Seed data created' : 'Seed data already present');
+    console.log(result === 'created' ? 'Seed data created' : 'Seed data synchronized');
   } finally {
     await prisma.$disconnect();
   }

@@ -46,7 +46,7 @@ describe('seed data (e2e)', () => {
       projects: await prisma.project.count(),
     };
 
-    await expect(seedDatabase(prisma)).resolves.toBe('skipped');
+    await expect(seedDatabase(prisma)).resolves.toBe('updated');
 
     const countsAfter = {
       profiles: await prisma.profile.count(),

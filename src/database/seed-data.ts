@@ -1,4 +1,3 @@
-// Temporary placeholder data for the test assignment; replace before submission.
 export interface SeedSkill {
   name: string;
   category: string;
@@ -19,7 +18,7 @@ export interface SeedProject {
   name: string;
   description: string;
   url: string | null;
-  repositoryUrl: string;
+  repositoryUrl: string | null;
   technologies: string[];
 }
 
@@ -31,23 +30,25 @@ export interface SeedProfile {
   email: string;
   location: string;
   githubUrl: string;
-  linkedinUrl: string;
+  linkedinUrl: string | null;
   skills: SeedSkill[];
   experience: SeedExperience[];
   projects: SeedProject[];
 }
 
 export const seedData: SeedProfile = {
-  slug: 'ksenia-lugovaa',
-  name: 'Ksenia Lugovaa',
-  title: 'TypeScript Backend Developer',
+  slug: 'ksenia-lugovaya',
+  name: 'Ксения Луговая',
+  title: 'Fullstack-разработчик с фокусом на backend',
   description:
-    'Backend-разработчик, проектирую API на NestJS, PostgreSQL и GraphQL. ' +
-    'Фокус на чистой архитектуре, типизации и производительности запросов к данным.',
-  email: 'ksenia@example.com',
-  location: 'Remote',
-  githubUrl: 'https://github.com/example',
-  linkedinUrl: 'https://www.linkedin.com/in/example',
+    'Fullstack-разработчик с опытом в финтехе и B2B-продуктах. ' +
+    'Проектирую API на Node.js (Express, NestJS) и TypeScript, работаю с GraphQL и REST, ' +
+    'интеграциями, ролевой моделью доступа и мониторингом. ' +
+    'Веду фичи от требований до продакшена; до разработки была проектным менеджером. Английский C1.',
+  email: 'k27873598@gmail.com',
+  location: 'Санкт-Петербург · удалённо',
+  githubUrl: 'https://github.com/klugovaya-droid',
+  linkedinUrl: null,
   skills: [
     { name: 'TypeScript', category: 'Languages', level: 5 },
     { name: 'Node.js', category: 'Backend', level: 5 },
@@ -60,29 +61,36 @@ export const seedData: SeedProfile = {
   ],
   experience: [
     {
-      company: 'Acme Fintech',
-      position: 'Backend Developer',
-      location: 'Remote',
-      startDate: '2023-01-01',
+      company: 'Банк ДОМ.РФ',
+      position: 'Senior Fullstack Developer (React/Node.js)',
+      location: 'Санкт-Петербург · удалённо',
+      startDate: '2023-03-01',
       endDate: null,
       description:
-        'Разработка платёжного API на NestJS и PostgreSQL, интеграции с внешними сервисами.',
+        'Отвечаю за backend-часть B2B и B2C банковских продуктов: BFF-сервисы, REST и GraphQL API, ' +
+        'интеграции и обновление статусов в реальном времени.',
       achievements: [
-        'Спроектировала GraphQL-слой и устранила N+1 в вложенных запросах через DataLoader',
-        'Сократила время ответа ключевых запросов на 40% за счёт индексов и батчинга',
-        'Настроила миграции Prisma и автоматический деплой в Docker',
+        'Спроектировала и поддерживаю BFF-сервисы на Node.js (Express, TypeScript): агрегация микросервисов, оптимизация контрактов и ускорение загрузки интерфейсов (LCP).',
+        'Разрабатываю REST и GraphQL API, WebSocket и SSE для обновления статусов заявок и операций в реальном времени.',
+        'Настроила интеграции с внешними и внутренними банковскими системами с таймаутами, ретраями и обработкой ошибок.',
+        'Реализовала ролевую модель доступа и практики OWASP: валидация входных данных, защита от типовых уязвимостей.',
+        'Оптимизирую запросы к БД и кеширование, разбираю инциденты на продакшене по логам и метрикам.',
+        'Покрываю критичный backend-код unit-тестами (Jest/Vitest), участвую в кросс-командном код-ревью и технической стратегии.',
       ],
     },
     {
-      company: 'Studio Web',
-      position: 'Junior Backend Developer',
-      location: 'Remote',
-      startDate: '2021-06-01',
-      endDate: '2022-12-31',
-      description: 'Разработка внутренних сервисов и REST API для клиентских проектов.',
+      company: 'СберКорус',
+      position: 'Frontend-разработчик middle с full-stack задачами',
+      location: 'Санкт-Петербург · удалённо',
+      startDate: '2020-07-01',
+      endDate: '2023-02-28',
+      description:
+        'Работала над EDI-проектами электронного документооборота; помимо frontend разрабатывала ' +
+        'лёгкие Node.js-сервисы, мок-серверы и контракты API.',
       achievements: [
-        'Внедрила типизированный слой доступа к данным на Prisma',
-        'Покрыла критические сценарии API интеграционными тестами',
+        'Проектировала взаимодействие frontend с API, описывала контракты и поддерживала интеграции.',
+        'Разрабатывала лёгкие Node.js-сервисы и мок-серверы для разработки и тестирования.',
+        'Развивала open-source библиотеку React-компонентов Korus-UI, покрывала код unit и e2e-тестами.',
       ],
     },
   ],
@@ -91,16 +99,16 @@ export const seedData: SeedProfile = {
       name: 'Business Card API',
       description:
         'Backend цифровой визитки на NestJS, Prisma, PostgreSQL и GraphQL с Apollo Sandbox.',
-      url: null,
-      repositoryUrl: 'https://github.com/example/business-card',
-      technologies: ['NestJS', 'Prisma', 'GraphQL', 'PostgreSQL', 'Docker'],
+      url: 'https://business-card-test-xenialugovayas-projects.vercel.app',
+      repositoryUrl: 'https://github.com/klugovaya-droid/business-card',
+      technologies: ['TypeScript', 'NestJS', 'Prisma', 'GraphQL', 'PostgreSQL', 'Docker'],
     },
     {
-      name: 'Notes API',
-      description: 'Сервис заметок с версионированием и оптимистичными блокировками.',
-      url: 'https://example.com/notes',
-      repositoryUrl: 'https://github.com/example/notes-api',
-      technologies: ['TypeScript', 'Node.js', 'PostgreSQL'],
+      name: 'Price Ninja',
+      description: 'Веб-сервис для сравнения цен.',
+      url: 'https://priceninja.ru/',
+      repositoryUrl: null,
+      technologies: ['TypeScript', 'NextJS'],
     },
   ],
 };

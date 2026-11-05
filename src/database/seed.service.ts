@@ -11,6 +11,6 @@ export class SeedService implements OnApplicationBootstrap {
   async onApplicationBootstrap(): Promise<void> {
     const result = await seedDatabase(this.prisma);
 
-    this.logger.log(result === 'seeded' ? 'Seed data created' : 'Seed data already present');
+    this.logger.log(result === 'created' ? 'Seed data created' : 'Seed data synchronized');
   }
 }
