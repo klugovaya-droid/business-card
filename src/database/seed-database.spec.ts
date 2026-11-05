@@ -8,18 +8,29 @@ describe('seedDatabase', () => {
     profile: {
       findUnique: vi.fn(),
       create: vi.fn(),
+      update: vi.fn(),
     },
   };
 
   beforeEach(() => {
     prisma.profile.findUnique.mockReset();
     prisma.profile.create.mockReset();
+    prisma.profile.update.mockReset();
   });
 
-  it('skips when the profile already exists', async () => {
+  it('updates and replaces related data when the profile exists', async () => {
     prisma.profile.findUnique.mockResolvedValue({ id: 'profile-1' });
+    prisma.profile.update.mockResolvedValue({ id: 'profile-1' });
 
-    await expect(seedDatabase(prisma as unknown as PrismaClient)).resolves.toBe('skipped');
+    await expect(seedDatabase(prisma as unknown as PrismaClient)).resolves.toBe('updated');
+
+    expect(prisma.profile.update).toHaveBeenCalledWith({
+      where: { id: 'profile-1' },
+      data: expect.objectContaining({
+        skills: { deleteMany: {}, create: seedData.skills },
+        projects: { deleteMany: {}, create: seedData.projects },
+      }),
+    });
     expect(prisma.profile.create).not.toHaveBeenCalled();
   });
 
@@ -27,7 +38,7 @@ describe('seedDatabase', () => {
     prisma.profile.findUnique.mockResolvedValue(null);
     prisma.profile.create.mockResolvedValue({ id: 'profile-1' });
 
-    await expect(seedDatabase(prisma as unknown as PrismaClient)).resolves.toBe('seeded');
+    await expect(seedDatabase(prisma as unknown as PrismaClient)).resolves.toBe('created');
 
     expect(prisma.profile.create).toHaveBeenCalledTimes(1);
     expect(prisma.profile.create).toHaveBeenCalledWith({
